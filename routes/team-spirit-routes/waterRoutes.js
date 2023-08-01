@@ -43,4 +43,8 @@ router.get(
   waterController.getFriendAccWater
 );
 
+router.post('/generate', waterController.generateDailyWater);
+
+router.delete('/delete', waterController.deleteOldWater);
+
 module.exports = router;

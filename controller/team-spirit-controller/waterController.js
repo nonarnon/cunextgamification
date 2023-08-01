@@ -108,3 +108,34 @@ module.exports.getFriendAccWater = async (req, res) => {
   }
   return res.status(response.status).send(response);
 };
+
+module.exports.generateDailyWater = async (req, res) => {
+  let response = { ...constants.defaultServerResponse };
+  try {
+    const respondFromService = await waterService.generateDailyWater();
+    response.status = 200;
+    response.message = constants.waterMessage.WATER_CREATED;
+    response.body = respondFromService;
+  } catch (error) {
+    console.log(
+      'Something went wrong: Controller => generateDailyWater',
+      error
+    );
+    response.message = error.message;
+  }
+  return res.status(response.status).send(response);
+};
+
+module.exports.deleteOldWater = async (req, res) => {
+  let response = { ...constants.defaultServerResponse };
+  try {
+    const respondFromService = await waterService.deleteOldWater();
+    response.status = 200;
+    response.message = constants.waterMessage.WATER_DELETED;
+    response.body = respondFromService;
+  } catch (error) {
+    console.log('Something went wrong: Controller => deleteOldWater', error);
+    response.message = error.message;
+  }
+  return res.status(response.status).send(response);
+};

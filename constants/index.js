@@ -47,6 +47,7 @@ module.exports = {
     WATER_FETCHED: 'Water Fetched Successfully',
     WATER_UPDATED: 'Water Updated Successfully',
     WATER_NOT_UPDATED: 'Failed to Updated Water',
+    WATER_DELETED: 'Water Deleted Successfully',
   },
   treeMessage: {
     TREE_CREATED: 'Tree Created Successfully',

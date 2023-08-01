@@ -234,3 +234,41 @@ module.exports.getFriendAccWater = async (userID, { player_name }) => {
     throw new Error(error);
   }
 };
+
+module.exports.generateDailyWater = async () => {
+  try {
+    const players = await knex('players').select();
+    const waterAmount = 5;
+
+    for (const player of players) {
+      for (let i = 0; i < waterAmount; i++) {
+        const generatedWater = {
+          water_id: translator.generate(),
+          player_id: player.player_id,
+          water_type_id: 2,
+        };
+        await knex('water').insert(generatedWater);
+      }
+    }
+
+    return constants.waterMessage.WATER_CREATED;
+  } catch (error) {
+    console.error('Something went wrong: Service => generateDailyWater', error);
+    throw new Error(error);
+  }
+};
+
+module.exports.deleteOldWater = async () => {
+  try {
+    await knex('water')
+      .whereNull('tree_id')
+      .andWhere('water_type_id', 2)
+      .andWhere('created_at', '<', knex.raw('CURRENT_TIMESTAMP'))
+      .del();
+
+    return constants.waterMessage.WATER_DELETED;
+  } catch (error) {
+    console.error('Something went wrong: Service => deleteOldWater', error);
+    throw new Error(error);
+  }
+};
