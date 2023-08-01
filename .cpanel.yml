@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/pnpspyks/gamedev.pnpspyksw.tech/
+    - /bin/cp -R . $DEPLOYPATH
