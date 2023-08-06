@@ -85,7 +85,6 @@ module.exports.updateUser = async (userID, updateData) => {
 
 module.exports.deleteUser = async (userID) => {
   try {
-    // Check if the user exists
     const user = await knex('users').where('user_id', userID).first();
     if (!user) {
       throw new Error(constants.userMessage.USER_NOT_FOUND);
@@ -96,9 +95,7 @@ module.exports.deleteUser = async (userID) => {
     if (!deletedUser) {
       throw new Error(constants.userMessage.USER_NOT_DELETE);
     }
-
-    // Return the deleted user information if needed
-    return user; // Optional: Return the deleted user information
+    return user;
   } catch (error) {
     console.error('Something went wrong: Service => deleteUser', error);
     throw new Error(error);
@@ -126,7 +123,7 @@ module.exports.login = async ({ username, password }) => {
     );
     return { token };
   } catch (error) {
-    console.error('Something went wrong: Service => register', error);
+    console.error('Something went wrong: Service => login', error);
     throw new Error(error);
   }
 };

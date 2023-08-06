@@ -28,21 +28,6 @@ router.put(
   waterController.waterTree
 );
 
-// get all accumulate water
-router.get(
-  '/self-acc-water',
-  tokenValidation.validateToken,
-  waterController.getSelfAccWater
-);
-
-// get all accumulate water of friends
-router.get(
-  '/friend-acc-water',
-  tokenValidation.validateToken,
-  joiSchemaValidation.validationBody(playerSchema.getPlayerNameSchema),
-  waterController.getFriendAccWater
-);
-
 router.post('/generate', waterController.generateDailyWater);
 
 router.delete('/delete', waterController.deleteOldWater);

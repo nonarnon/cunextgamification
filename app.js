@@ -20,7 +20,7 @@ app.use('/water', require('./routes/team-spirit-routes/waterRoutes'));
 app.use('/tree', require('./routes/team-spirit-routes/treeRoutes'));
 app.use('/level', require('./routes/integrity-routes/levelRoutes'));
 app.use('/item', require('./routes/integrity-routes/itemRoutes'));
-app.use('/character', require('./routes/integrity-routes/characterRoutes'));
+app.use('/character', require('./routes/characterRoutes'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

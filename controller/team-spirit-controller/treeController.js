@@ -1,26 +1,26 @@
 const treeService = require('../../service/team-spirit-service/treeService');
 const constants = require('../../constants');
 
-module.exports.getSelfTree = async (req, res) => {
+module.exports.getSelfTreeData = async (req, res) => {
   let response = { ...constants.defaultServerResponse };
   try {
-    const respondFromService = await treeService.getSelfTree(
+    const respondFromService = await treeService.getSelfTreeData(
       req.headers.userID
     );
     response.status = 200;
     response.message = constants.treeMessage.TREE_FETCHED;
     response.body = respondFromService;
   } catch (error) {
-    console.log('Something went wrong: Controller => getSelfTree', error);
+    console.log('Something went wrong: Controller => getSelfTreeData', error);
     response.message = error.message;
   }
   return res.status(response.status).send(response);
 };
 
-module.exports.getFriendTree = async (req, res) => {
+module.exports.getFriendTreeData = async (req, res) => {
   let response = { ...constants.defaultServerResponse };
   try {
-    const respondFromService = await treeService.getFriendTree(
+    const respondFromService = await treeService.getFriendTreeData(
       req.headers.userID,
       req.body
     );
@@ -28,7 +28,7 @@ module.exports.getFriendTree = async (req, res) => {
     response.message = constants.treeMessage.TREE_FETCHED;
     response.body = respondFromService;
   } catch (error) {
-    console.log('Something went wrong: Controller => getFriendTree', error);
+    console.log('Something went wrong: Controller => getFriendTreeData', error);
     response.message = error.message;
   }
   return res.status(response.status).send(response);
@@ -45,6 +45,22 @@ module.exports.getHelpHistory = async (req, res) => {
     response.body = respondFromService;
   } catch (error) {
     console.log('Something went wrong: Controller => getHelpHistory', error);
+    response.message = error.message;
+  }
+  return res.status(response.status).send(response);
+};
+
+module.exports.harvestCoins = async (req, res) => {
+  let response = { ...constants.defaultServerResponse };
+  try {
+    const respondFromService = await treeService.harvestCoins(
+      req.headers.userID
+    );
+    response.status = 200;
+    response.message = constants.treeMessage.TREE_HARVESTED;
+    response.body = respondFromService;
+  } catch (error) {
+    console.log('Something went wrong: Controller => harvestCoins', error);
     response.message = error.message;
   }
   return res.status(response.status).send(response);

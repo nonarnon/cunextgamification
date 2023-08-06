@@ -9,12 +9,11 @@ const knex = require('knex')({
   },
 });
 
+const playerService = require('../playerService');
+
 module.exports.getLevel = async (userID) => {
   try {
-    const player = await knex('players')
-      .select()
-      .where('user_id', userID)
-      .first();
+    const player = await knex('players').where('user_id', userID).first();
     if (!player) {
       throw new Error(constants.playerMessage.PLAYER_NOT_FOUND);
     }
@@ -24,6 +23,32 @@ module.exports.getLevel = async (userID) => {
     return levels;
   } catch (error) {
     console.error('Something went wrong: Service => getLevel', error);
+    throw new Error(error);
+  }
+};
+
+module.exports.gameOver = async (userID, { level_id }) => {
+  try {
+    const player = await knex('players')
+      .select()
+      .where('user_id', userID)
+      .first();
+    if (!player) {
+      throw new Error(constants.playerMessage.PLAYER_NOT_FOUND);
+    }
+
+    const reward = await knex('running_game_level')
+      .select('level_reward')
+      .where('level_id', level_id)
+      .first();
+
+    // update scores
+    const remainScores = player.player_score + reward.level_reward;
+    playerService.updatePlayerData(userID, { player_score: remainScores });
+
+    return { nowScore: remainScores };
+  } catch (error) {
+    console.error('Something went wrong: Service => gameOver', error);
     throw new Error(error);
   }
 };

@@ -76,11 +76,8 @@ module.exports.purchaseProduct = async (userID, productData) => {
     }
 
     // update stars
-    console.log('stars: ', stars.player_star);
-    console.log('product_price: ', product.product_price);
     const remainStars = stars.player_star - product.product_price;
-    console.log('Remaining stars: ', remainStars);
-    playerService.updateStars(userID, remainStars);
+    playerService.updatePlayerData(userID, { player_star: remainStars });
 
     // update water
     const waterAmount = product.product_amount;

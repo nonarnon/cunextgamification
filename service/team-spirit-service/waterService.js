@@ -172,69 +172,6 @@ module.exports.waterTree = async (userID, { tree_id }) => {
   }
 };
 
-module.exports.getSelfAccWater = async (userID) => {
-  try {
-    const player = await knex('players')
-      .select()
-      .where('user_id', userID)
-      .first();
-    if (!player) {
-      throw new Error(constants.playerMessage.PLAYER_NOT_FOUND);
-    }
-
-    const tree = await knex('trees')
-      .select()
-      .where('player_id', player.player_id)
-      .first();
-
-    const selfAccWater = await knex('water')
-      .count('* as acc_water')
-      .where('tree_id', tree.tree_id)
-      .first();
-
-    return selfAccWater;
-  } catch (error) {
-    console.error('Something went wrong: Service => getSelfAccWater', error);
-    throw new Error(error);
-  }
-};
-
-module.exports.getFriendAccWater = async (userID, { player_name }) => {
-  try {
-    const player = await knex('players')
-      .select()
-      .where('user_id', userID)
-      .first();
-    if (!player) {
-      throw new Error(constants.playerMessage.PLAYER_NOT_FOUND);
-    }
-
-    // find friend
-    const friend = await knex('players')
-      .select()
-      .where('player_name', player_name)
-      .first();
-    if (!friend) {
-      throw new Error(constants.playerMessage.PLAYER_NOT_FOUND);
-    }
-
-    const tree = await knex('trees')
-      .select()
-      .where('player_id', friend.player_id)
-      .first();
-
-    const friendAccWater = await knex('water')
-      .count('* as acc_water')
-      .where('tree_id', tree.tree_id)
-      .first();
-
-    return friendAccWater;
-  } catch (error) {
-    console.error('Something went wrong: Service => getFriendAccWater', error);
-    throw new Error(error);
-  }
-};
-
 module.exports.generateDailyWater = async () => {
   try {
     const players = await knex('players').select();

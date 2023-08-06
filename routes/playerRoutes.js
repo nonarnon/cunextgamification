@@ -28,14 +28,6 @@ router.get(
   playerController.getPlayerByID
 );
 
-// search player by Name
-router.get(
-  '/friend-profile',
-  tokenValidation.validateToken,
-  joiSchemaValidation.validationBody(playerSchema.getPlayerNameSchema),
-  playerController.getPlayerByName
-);
-
 // get rank: order by score
 router.get(
   '/rank',

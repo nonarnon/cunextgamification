@@ -1,4 +1,3 @@
-const constants = require('../constants');
 const shortUUID = require('short-uuid');
 const translator = shortUUID();
 const knex = require('knex')({

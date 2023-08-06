@@ -76,39 +76,6 @@ module.exports.waterTree = async (req, res) => {
   return res.status(response.status).send(response);
 };
 
-module.exports.getSelfAccWater = async (req, res) => {
-  let response = { ...constants.defaultServerResponse };
-  try {
-    const respondFromService = await waterService.getSelfAccWater(
-      req.headers.userID
-    );
-    response.status = 200;
-    response.message = constants.waterMessage.WATER_FETCHED;
-    response.body = respondFromService;
-  } catch (error) {
-    console.log('Something went wrong: Controller => getSelfAccWater', error);
-    response.message = error.message;
-  }
-  return res.status(response.status).send(response);
-};
-
-module.exports.getFriendAccWater = async (req, res) => {
-  let response = { ...constants.defaultServerResponse };
-  try {
-    const respondFromService = await waterService.getFriendAccWater(
-      req.headers.userID,
-      req.body
-    );
-    response.status = 200;
-    response.message = constants.waterMessage.WATER_FETCHED;
-    response.body = respondFromService;
-  } catch (error) {
-    console.log('Something went wrong: Controller => getFriendAccWater', error);
-    response.message = error.message;
-  }
-  return res.status(response.status).send(response);
-};
-
 module.exports.generateDailyWater = async (req, res) => {
   let response = { ...constants.defaultServerResponse };
   try {

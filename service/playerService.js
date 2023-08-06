@@ -37,7 +37,6 @@ module.exports.register = async (userID, playerData) => {
       throw new Error(constants.playerMessage.PLAYER_EXISTED);
     }
 
-    // Validate player name format (allow English alphabets, numbers, dots, dashes, and other symbols, and be at least 8 characters long)
     const playerNameRegex = /^[a-zA-Z0-9.\-_!@#$%^&*()+=?<>{}[\]:;"'|]{8,}$/;
     if (!playerNameRegex.test(playerData.player_name)) {
       throw new Error(constants.playerMessage.PLAYER_NAME_INVALID);
@@ -67,6 +66,7 @@ module.exports.register = async (userID, playerData) => {
     let waterType = 1;
     waterService.createWater(userID, waterAmount, waterType);
     console.log('Self Water Created Successfully');
+
     // and insert water for friends
     waterType = 2;
     waterService.createWater(userID, waterAmount, waterType);
@@ -95,7 +95,13 @@ module.exports.getAllPlayers = async ({ skip = 0, limit = 10 }) => {
 module.exports.getPlayerByID = async (userID) => {
   try {
     const player = await knex('players')
-      .select()
+      .select(
+        'players.*',
+        'character_name',
+        'character_front',
+        'character_back'
+      )
+      .join('character', 'character.character_id', 'players.player_character')
       .where('user_id', userID)
       .first();
     if (!player) {
@@ -104,33 +110,6 @@ module.exports.getPlayerByID = async (userID) => {
     return player;
   } catch (error) {
     console.error('Something went wrong: Service => getPlayerByID', error);
-    throw new Error(error);
-  }
-};
-
-// search friend
-module.exports.getPlayerByName = async (userID, { player_name }) => {
-  try {
-    const player = await knex('players')
-      .select()
-      .where('user_id', userID)
-      .first();
-    if (!player) {
-      throw new Error(constants.playerMessage.PLAYER_NOT_FOUND);
-    }
-
-    // find friend
-    const friend = await knex('players')
-      .select()
-      .where('player_name', player_name)
-      .first();
-    if (!friend) {
-      throw new Error(constants.playerMessage.PLAYER_NOT_FOUND);
-    }
-
-    return friend;
-  } catch (error) {
-    console.error('Something went wrong: Service => getPlayerByName', error);
     throw new Error(error);
   }
 };
@@ -201,7 +180,6 @@ module.exports.updatePlayer = async (userID, updateData) => {
     }
 
     // Update the player information
-    updateData.player_level = Math.floor(updateData.player_score / 100);
     const updatedPlayer = await knex('players')
       .where('user_id', userID)
       .update(updateData);
@@ -220,7 +198,7 @@ module.exports.updatePlayer = async (userID, updateData) => {
   }
 };
 
-module.exports.updateStars = async (userID, starAmount) => {
+module.exports.updatePlayerData = async (userID, dataToUpdate) => {
   try {
     // Check if the player exists
     const player = await knex('players').where('user_id', userID).first();
@@ -228,10 +206,18 @@ module.exports.updateStars = async (userID, starAmount) => {
       throw new Error(constants.playerMessage.PLAYER_NOT_FOUND);
     }
 
-    // Update the player's star
-    await knex('players')
-      .where('user_id', userID)
-      .update({ player_star: starAmount });
+    // Update the specific data field based on input
+    const updateData = {};
+    if (dataToUpdate.hasOwnProperty('player_star')) {
+      updateData.player_star = dataToUpdate.player_star;
+    }
+    if (dataToUpdate.hasOwnProperty('player_coin')) {
+      updateData.player_coin = dataToUpdate.player_coin;
+    }
+    if (dataToUpdate.hasOwnProperty('player_score')) {
+      updateData.player_score = dataToUpdate.player_score;
+    }
+    await knex('players').where('user_id', userID).update(updateData);
 
     // Fetch and return the updated player
     const updatedPlayer = await knex('players')
@@ -239,18 +225,10 @@ module.exports.updateStars = async (userID, starAmount) => {
       .first();
     return updatedPlayer;
   } catch (error) {
-    console.error('Something went wrong: Service => updatePlayer', error);
+    console.error('Something went wrong: Service => updatePlayerData', error);
     throw new Error(error);
   }
 };
-
-// update coins
-//
-//
-
-// update score
-//
-//
 
 module.exports.deletePlayer = async (userID) => {
   try {

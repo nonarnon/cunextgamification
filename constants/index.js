@@ -52,9 +52,11 @@ module.exports = {
   treeMessage: {
     TREE_CREATED: 'Tree Created Successfully',
     TREE_FETCHED: 'Tree Fetched Successfully',
+    TREE_HARVESTED: 'Tree Harvested Successfully',
   },
   levelMessage: {
     LEVEL_FETCHED: 'Level Fetched Successfully',
+    LEVEL_REWARD: 'Earn Level Reward Successfully',
   },
   itemMessage: {
     ITEM_FETCHED: 'Item Fetched Successfully',
@@ -63,6 +65,7 @@ module.exports = {
   },
   characterMessage: {
     CHARACTER_FETCHED: 'Character Fetched Successfully',
+    APPEARANCE_FETCHED: 'Appearance Fetched Successfully',
   },
   requestValidationMessage: {
     BAD_REQUEST: 'Invalid Fields',

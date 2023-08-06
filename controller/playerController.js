@@ -48,23 +48,6 @@ module.exports.getPlayerByID = async (req, res) => {
   return res.status(response.status).send(response);
 };
 
-module.exports.getPlayerByName = async (req, res) => {
-  let response = { ...constants.defaultServerResponse };
-  try {
-    const respondFromService = await playerService.getPlayerByName(
-      req.headers.userID,
-      req.body
-    );
-    response.status = 200;
-    response.message = constants.playerMessage.PLAYER_FETCHED;
-    response.body = respondFromService;
-  } catch (error) {
-    console.log('Something went wrong: Controller => getPlayerByName', error);
-    response.message = error.message;
-  }
-  return res.status(response.status).send(response);
-};
-
 module.exports.rankOrderByScore = async (req, res) => {
   let response = { ...constants.defaultServerResponse };
   try {

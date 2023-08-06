@@ -41,16 +41,12 @@ module.exports.collectItem = async (userID, { item_id }) => {
       .where('item_id', item_id)
       .first();
 
-    // update stars
     if (item.item_value === 0) {
       return constants.itemMessage.ITEM_BOMB;
     }
-
-    console.log('stars: ', player.player_star);
-    console.log('item_value: ', item.item_value);
+    // update stars
     const remainStars = player.player_star + item.item_value;
-    console.log('Remaining stars: ', remainStars);
-    playerService.updateStars(userID, remainStars);
+    playerService.updatePlayerData(userID, { player_star: remainStars });
 
     return item;
   } catch (error) {
